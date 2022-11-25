@@ -18,7 +18,7 @@ jobs:
         run: yarn install
       - uses: actions/cache@v3
         name: Retrieve Yarn Cache
-        id: build-cache
+        id: yarn-cache
         with:
           path: ${{ github.workspace }}/.yarn/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}-
