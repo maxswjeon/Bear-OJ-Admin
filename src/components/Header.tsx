@@ -4,7 +4,7 @@ import {
   faRightFromBracket,
   faSquareQuestion,
   faTrophy,
-  faUsers
+  faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import Logo from "assets/Logo.png";
 import axios from "axios";
@@ -16,7 +16,7 @@ import { useAuthStore } from "store/auth";
 
 const Header = () => {
   const router = useRouter();
-  const {setAuthenticated} = useAuthStore();
+  const { setAuthenticated } = useAuthStore();
 
   const logout = async () => {
     await axios.delete(process.env.NEXT_PUBLIC_API_URL + "/session", {
@@ -37,13 +37,7 @@ const Header = () => {
     >
       <Link href="/">
         <Flex cursor="pointer">
-          <Image
-            w="auto"
-            h="auto"
-            width="180px"
-            src={Logo}
-            alt="YCC Logo"
-          />
+          <Image w="auto" h="auto" width="180px" src={Logo} alt="Logo" />
           <Text ml="8pt" fontWeight={600} whiteSpace="pre">
             온라인 저지 관리자 페이지
           </Text>
@@ -63,11 +57,7 @@ const Header = () => {
         <Icon cursor="pointer" icon={faFaceSunglasses} />
       </Link>
       <Box cursor="pointer">
-        <Icon
-          cursor="pointer"
-          icon={faRightFromBracket}
-          onClick={logout}
-        />
+        <Icon cursor="pointer" icon={faRightFromBracket} onClick={logout} />
       </Box>
     </Flex>
   );
