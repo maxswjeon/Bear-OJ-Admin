@@ -9,16 +9,15 @@ jobs:
     permissions:
       contents: read
       deployments: write
-    env:
-      NEXT_PUBLIC_API_URL: https://api.contest.ycc.club
-      NEXT_PUBLIC_OJ_NAME: "연세대학교 중앙 컴퓨터동아리 YCC\n고려대학교 중앙 컴퓨터동아리 KUCC\n온라인 저지"
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18
       - name: Install Dependencies
-        run: FONTAWESOME_TOKEN=${{ secrets.FONTAWESOME_TOKEN }} yarn install
+        run: yarn install
+        env:
+          FONTAWESOME_TOKEN: ${{ secrets.FONTAWESOME_TOKEN }}
       - uses: actions/cache@v3
         name: Retrieve Yarn Cache
         id: yarn-cache
@@ -35,8 +34,15 @@ jobs:
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
+      - name: Create .env file
+        run: |
+          jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
       - name: Build
-        run: FONTAWESOME_TOKEN=${{ secrets.FONTAWESOME_TOKEN }} yarn build
+        run: yarn build
+        env:
+          FONTAWESOME_TOKEN: ${{ secrets.FONTAWESOME_TOKEN }}
       - uses: cloudflare/pages-action@1
         name: Publish
         with:
